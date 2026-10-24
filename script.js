@@ -1,5 +1,6 @@
 
-const OPENWEATHER_API_KEY = "YOUR_OPENWEATHER_API_KEY";
+const WEATHER_API_URL = "https://dry-bird-588b.braafath799.workers.dev/weather";
+
 const form = document.getElementById("weather-form");
 const locationInput = document.getElementById("location-input");
 const searchButton = document.getElementById("search-button");
@@ -80,7 +81,9 @@ function setLoading(loading) {
 }
 
 async function geocodeLocation(query, signal) {
-    const url = new URL("https://nominatim.openstreetmap.org/search");
+    const url = new URL(
+        "https://nominatim.openstreetmap.org/search"
+    );
 
     url.search = new URLSearchParams({
         q: query,
@@ -97,13 +100,17 @@ async function geocodeLocation(query, signal) {
     });
 
     if (!response.ok) {
-        throw new Error("City search is temporarily unavailable. Please try again.");
+        throw new Error(
+            "City search is temporarily unavailable. Please try again."
+        );
     }
 
     const results = await response.json();
 
     if (!Array.isArray(results) || results.length === 0) {
-        throw new Error("City not found. Check the spelling and try again.");
+        throw new Error(
+            "City not found. Check the spelling and try again."
+        );
     }
 
     const result = results[0];
@@ -116,20 +123,10 @@ async function geocodeLocation(query, signal) {
 }
 
 async function fetchCurrentWeather(location, signal) {
-    if (
-        !OPENWEATHER_API_KEY ||
-        OPENWEATHER_API_KEY === "YOUR_OPENWEATHER_API_KEY"
-    ) {
-        throw new Error("Add your active OpenWeatherMap API key in script.js first.");
-    }
-
-    const url = new URL("https://api.openweathermap.org/data/2.5/weather");
+    const url = new URL(WEATHER_API_URL);
 
     url.search = new URLSearchParams({
-        lat: String(location.latitude),
-        lon: String(location.longitude),
-        appid: OPENWEATHER_API_KEY,
-        units: "metric"
+        city: getShortLocationName(location)
     }).toString();
 
     const response = await fetch(url, { signal });
@@ -137,14 +134,28 @@ async function fetchCurrentWeather(location, signal) {
 
     if (!response.ok) {
         if (response.status === 401) {
-            throw new Error("The weather API key is invalid or not active yet.");
+            throw new Error(
+                "The weather API key is invalid or not active yet."
+            );
         }
 
         if (response.status === 429) {
-            throw new Error("Weather request limit reached. Please try again later.");
+            throw new Error(
+                "Weather request limit reached. Please try again later."
+            );
         }
 
-        throw new Error(data.message || "Unable to retrieve weather information.");
+        throw new Error(
+            data.message ||
+            data.error ||
+            "Unable to retrieve weather information."
+        );
+    }
+
+    if (!data.main || !Array.isArray(data.weather) || !data.weather[0]) {
+        throw new Error(
+            "The weather service returned an invalid response."
+        );
     }
 
     return data;
@@ -159,9 +170,14 @@ function buildPopupContent(location, weather) {
     const cityName = escapeHTML(getShortLocationName(location));
     const condition = escapeHTML(weather.weather[0].description);
     const iconCode = weather.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${encodeURIComponent(iconCode)}@2x.png`;
 
-    const shareMessage = `Weather in ${getShortLocationName(location)}: ${Math.round(weather.main.temp)}°C, ${weather.weather[0].description}. Data from OpenWeatherMap.`;
+    const iconUrl =
+        `https://openweathermap.org/img/wn/${encodeURIComponent(iconCode)}@2x.png`;
+
+    const shareMessage =
+        `Weather in ${getShortLocationName(location)}: ` +
+        `${Math.round(weather.main.temp)}°C, ` +
+        `${weather.weather[0].description}. Data from OpenWeatherMap.`;
 
     return `
         <div class="popup-weather">
@@ -215,14 +231,26 @@ function renderWeather(location, weather) {
     currentWeather = weather;
 
     weatherCity.textContent = getShortLocationName(location);
-    weatherTemperature.textContent = `${Math.round(weather.main.temp)}°C`;
+    weatherTemperature.textContent =
+        `${Math.round(weather.main.temp)}°C`;
 
-    weatherDescription.textContent = weather.weather[0].description;
-    weatherFeelsLike.textContent = `${Math.round(weather.main.feels_like)}°C`;
-    weatherHumidity.textContent = `${weather.main.humidity}%`;
-    weatherWind.textContent = `${weather.wind.speed} m/s`;
-    weatherClouds.textContent = `${weather.clouds.all}%`;
-    weatherPressure.textContent = `${weather.main.pressure} hPa`;
+    weatherDescription.textContent =
+        weather.weather[0].description;
+
+    weatherFeelsLike.textContent =
+        `${Math.round(weather.main.feels_like)}°C`;
+
+    weatherHumidity.textContent =
+        `${weather.main.humidity}%`;
+
+    weatherWind.textContent =
+        `${weather.wind.speed} m/s`;
+
+    weatherClouds.textContent =
+        `${weather.clouds.all}%`;
+
+    weatherPressure.textContent =
+        `${weather.main.pressure} hPa`;
 
     weatherIcon.src =
         `https://openweathermap.org/img/wn/${encodeURIComponent(weather.weather[0].icon)}@2x.png`;
@@ -238,12 +266,6 @@ function renderWeather(location, weather) {
 }
 
 async function searchWeather(query) {
-    if (isLoading) {
-        if (activeRequest) {
-            activeRequest.abort();
-        }
-    }
-
     if (activeRequest) {
         activeRequest.abort();
     }
@@ -278,7 +300,10 @@ async function searchWeather(query) {
             return;
         }
 
-        showError(error.message || "Something went wrong. Please try again.");
+        showError(
+            error.message || "Something went wrong. Please try again."
+        );
+
         setStatus("");
     } finally {
         if (activeRequest === controller) {
@@ -301,7 +326,10 @@ function getFavorites() {
 
 function saveFavorites(favorites) {
     try {
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        localStorage.setItem(
+            FAVORITES_KEY,
+            JSON.stringify(favorites)
+        );
     } catch {
         showError("Unable to save favorites in this browser.");
     }
@@ -321,16 +349,22 @@ function isFavorite(location) {
 function updateFavoriteButton() {
     if (!currentLocation) {
         favoriteButton.textContent = "♡";
-        favoriteButton.setAttribute("aria-label", "Add city to favorites");
+        favoriteButton.setAttribute(
+            "aria-label",
+            "Add city to favorites"
+        );
         return;
     }
 
     const saved = isFavorite(currentLocation);
 
     favoriteButton.textContent = saved ? "♥" : "♡";
+
     favoriteButton.setAttribute(
         "aria-label",
-        saved ? "Remove city from favorites" : "Add city to favorites"
+        saved
+            ? "Remove city from favorites"
+            : "Add city to favorites"
     );
 }
 
@@ -345,7 +379,9 @@ function renderFavorites() {
     if (favorites.length === 0) {
         const emptyMessage = document.createElement("p");
         emptyMessage.className = "empty-message";
-        emptyMessage.textContent = "Your favorite cities will appear here.";
+        emptyMessage.textContent =
+            "Your favorite cities will appear here.";
+
         favoritesList.appendChild(emptyMessage);
         return;
     }
@@ -358,6 +394,7 @@ function renderFavorites() {
         cityButton.type = "button";
         cityButton.className = "favorite-city";
         cityButton.textContent = favorite.name;
+
         cityButton.addEventListener("click", () => {
             searchWeather(favorite.name);
         });
@@ -366,6 +403,7 @@ function renderFavorites() {
         removeButton.type = "button";
         removeButton.className = "remove-favorite";
         removeButton.textContent = "Remove";
+
         removeButton.setAttribute(
             "aria-label",
             `Remove ${favorite.name} from favorites`
@@ -437,7 +475,10 @@ async function shareWeather(message) {
             return;
         }
 
-        window.prompt("Copy this weather information:", message);
+        window.prompt(
+            "Copy this weather information:",
+            message
+        );
     } catch (error) {
         if (error.name !== "AbortError") {
             showError("Unable to share weather information.");
@@ -467,11 +508,14 @@ map.on("popupopen", event => {
         return;
     }
 
-    const popupShareButton = popupElement.querySelector(".popup-share");
+    const popupShareButton =
+        popupElement.querySelector(".popup-share");
 
     if (popupShareButton) {
         popupShareButton.addEventListener("click", () => {
-            shareWeather(popupShareButton.dataset.shareMessage || "");
+            shareWeather(
+                popupShareButton.dataset.shareMessage || ""
+            );
         });
     }
 });
