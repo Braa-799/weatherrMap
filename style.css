@@ -1,0 +1,506 @@
+
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #18243a;
+    background: #f4f7fb;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    --primary: #315efb;
+    --primary-dark: #2447cb;
+    --muted: #6b7890;
+    --border: #e5eaf2;
+    --card: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.site-header {
+    min-height: 76px;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #18243a;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    color: white;
+    background: var(--primary);
+    border-radius: 12px;
+    font-size: 24px;
+}
+
+.header-label {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.container {
+    width: min(1180px, 90%);
+    margin: 0 auto;
+}
+
+.hero {
+    padding: 55px 0 32px;
+    text-align: center;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 48px);
+    letter-spacing: -1.5px;
+}
+
+.hero-description {
+    max-width: 590px;
+    margin: 15px auto 25px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    width: min(680px, 100%);
+    margin: 0 auto;
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 16px 18px;
+    color: #18243a;
+    background: white;
+    border: 1px solid #dce3ee;
+    border-radius: 12px;
+    outline: none;
+}
+
+.search-form input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgb(49 94 251 / 12%);
+}
+
+.search-form button,
+.secondary-button {
+    padding: 15px 22px;
+    color: white;
+    background: var(--primary);
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: background 0.2s ease;
+}
+
+.search-form button:hover,
+.secondary-button:hover {
+    background: var(--primary-dark);
+}
+
+.status-message,
+.error-message {
+    min-height: 20px;
+    margin: 14px 0 0;
+    font-size: 13px;
+}
+
+.status-message {
+    color: var(--muted);
+}
+
+.error-message {
+    color: #c62828;
+}
+
+.weather-layout {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 22px;
+    align-items: stretch;
+}
+
+.weather-card,
+.map-card,
+.favorites-section {
+    padding: 25px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgb(25 45 80 / 4%);
+}
+
+.card-heading,
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.card-heading h2,
+.section-heading h2 {
+    margin: 0;
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.icon-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    color: var(--primary);
+    background: #edf1ff;
+    border: none;
+    border-radius: 14px;
+    font-size: 27px;
+}
+
+.temperature-section {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 155px;
+    padding: 18px 0;
+}
+
+.weather-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.temperature {
+    margin: 0;
+    font-size: clamp(38px, 5vw, 55px);
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.weather-description {
+    margin: 8px 0 0;
+    color: var(--muted);
+    text-transform: capitalize;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 13px 10px;
+    background: #f7f9fd;
+    border-radius: 12px;
+}
+
+.detail-icon {
+    font-size: 22px;
+}
+
+.detail-item > div {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.detail-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.detail-item strong {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.secondary-button {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.map-badge {
+    padding: 7px 10px;
+    color: #137448;
+    background: #e6f7ef;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+#map {
+    width: 100%;
+    height: 70vh;
+    min-height: 340px;
+    max-height: 600px;
+    margin-top: 20px;
+    border-radius: 14px;
+    z-index: 1;
+}
+
+.map-caption {
+    margin: 14px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.favorites-section {
+    margin: 24px 0 40px;
+}
+
+.favorites-count {
+    color: var(--muted);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.favorites-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.favorite-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.favorite-city {
+    flex: 1;
+    padding: 0;
+    color: #18243a;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.remove-favorite {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    color: #c62828;
+    background: #fff0f0;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.empty-message {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 22px;
+    color: var(--muted);
+    background: #f7f9fd;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.site-footer {
+    padding: 25px 5%;
+    color: var(--muted);
+    background: white;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.leaflet-popup-content {
+    min-width: 210px;
+}
+
+.popup-weather {
+    display: grid;
+    gap: 8px;
+}
+
+.popup-weather h3 {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.popup-temperature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.popup-temperature img {
+    width: 48px;
+    height: 48px;
+}
+
+.popup-condition {
+    color: var(--muted);
+    text-transform: capitalize;
+}
+
+.popup-details {
+    display: grid;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.popup-share {
+    padding: 9px 12px;
+    color: white;
+    background: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+@media (max-width: 850px) {
+    .weather-layout {
+        grid-template-columns: 1fr;
+    }
+
+    #map {
+        height: 55vh;
+    }
+}
+
+@media (max-width: 520px) {
+    .site-header {
+        padding: 15px 5%;
+    }
+
+    .brand {
+        font-size: 18px;
+    }
+
+    .header-label {
+        max-width: 115px;
+        font-size: 11px;
+        text-align: right;
+    }
+
+    .container {
+        width: 92%;
+    }
+
+    .hero {
+        padding-top: 38px;
+    }
+
+    .hero h1 {
+        letter-spacing: -0.8px;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form button {
+        min-height: 48px;
+    }
+
+    .weather-card,
+    .map-card,
+    .favorites-section {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .temperature-section {
+        gap: 8px;
+    }
+
+    .weather-icon {
+        width: 75px;
+        height: 75px;
+    }
+
+    .temperature {
+        font-size: 40px;
+    }
+
+    .weather-details {
+        gap: 8px;
+    }
+
+    .detail-item {
+        padding: 11px 8px;
+    }
+
+    #map {
+        min-height: 320px;
+    }
+}

@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WeatherMap provides current weather information and interactive maps for cities around the world.">
+    <title>WeatherMap | Live Weather</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#">
+            <span class="brand-icon">☀</span>
+            <span>WeatherMap</span>
+        </a>
+        <span class="header-label">Live Weather Explorer</span>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <p class="eyebrow">WEATHER AROUND THE WORLD</p>
+            <h1>Discover the weather anywhere.</h1>
+            <p class="hero-description">Search for a city to explore its current weather and location on the map.</p>
+
+            <form id="weather-form" class="search-form">
+                <label class="visually-hidden" for="location-input">City name</label>
+                <input
+                    id="location-input"
+                    name="location"
+                    type="text"
+                    placeholder="Enter a city, e.g. Khartoum"
+                    autocomplete="off"
+                    required
+                    maxlength="120"
+                >
+                <button id="search-button" type="submit">Get Weather</button>
+            </form>
+
+            <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
+            <p id="error-message" class="error-message" role="alert" hidden></p>
+        </section>
+
+        <section class="weather-layout" aria-label="Weather information">
+            <article class="weather-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">CURRENT CONDITIONS</p>
+                        <h2 id="weather-city">Weather Details</h2>
+                    </div>
+                    <button id="favorite-button" class="icon-button" type="button" aria-label="Add city to favorites" disabled>♡</button>
+                </div>
+
+                <div class="temperature-section">
+                    <img id="weather-icon" class="weather-icon" alt="Weather condition icon" hidden>
+                    <div>
+                        <p id="weather-temperature" class="temperature">--°C</p>
+                        <p id="weather-description" class="weather-description">Search for a city to begin</p>
+                    </div>
+                </div>
+
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">🌡️</span>
+                        <div>
+                            <span class="detail-label">Feels Like</span>
+                            <strong id="weather-feels-like">--°C</strong>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💧</span>
+                        <div>
+                            <span class="detail-label">Humidity</span>
+                            <strong id="weather-humidity">--%</strong>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💨</span>
+                        <div>
+                            <span class="detail-label">Wind Speed</span>
+                            <strong id="weather-wind">-- m/s</strong>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">☁️</span>
+                        <div>
+                            <span class="detail-label">Cloudiness</span>
+                            <strong id="weather-clouds">--%</strong>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🔵</span>
+                        <div>
+                            <span class="detail-label">Pressure</span>
+                            <strong id="weather-pressure">-- hPa</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="share-button" class="secondary-button" type="button" disabled>Share Weather</button>
+            </article>
+
+            <article class="map-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">EXPLORE LOCATIONS</p>
+                        <h2>Interactive Map</h2>
+                    </div>
+                    <span class="map-badge">Live Map</span>
+                </div>
+                <div id="map" role="application" aria-label="Interactive weather map"></div>
+                <p class="map-caption">Search for a city to move the map and view its weather marker.</p>
+            </article>
+        </section>
+
+        <section class="favorites-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR SAVED PLACES</p>
+                    <h2>Favorite Cities</h2>
+                </div>
+                <span id="favorites-count" class="favorites-count">0 cities</span>
+            </div>
+            <div id="favorites-list" class="favorites-list">
+                <p class="empty-message">Your favorite cities will appear here.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>WeatherMap · Weather data provided by OpenWeatherMap · Maps by OpenStreetMap</p>
+    </footer>
+</body>
+</html>
